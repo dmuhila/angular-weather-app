@@ -1,0 +1,14 @@
+<form
+  [formGroup]="weatherForm"
+  (ngSubmit)="onSubmit()"
+  [ngClass]="{ 'location-url': isMain, 'home-container': isMain }"
+>
+  <h1 *ngIf="isMain" class="header">Enter a City and State</h1>
+
+  <div class="location-container">
+    <input type="text" class="form-control" id="name" formControlName="name" />
+    <button type="submit" class="btn btn-success" style="margin: 10px;">
+      Get Weather
+    </button>
+  </div>
+</form>

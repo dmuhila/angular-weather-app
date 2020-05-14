@@ -1,0 +1,17 @@
+<div *ngIf="isLoading" style="text-align: center; margin: 45px;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+<h1 class="week-header">{{ city }}</h1>
+<div class="week-container">
+  <div
+    class="dayContainer"
+    (click)="onClick(i)"
+    *ngFor="let forecast of forecasts; let i = index"
+  >
+    <app-data
+      [forecast]="forecast"
+      [index]="i"
+      [isIndividual]="false"
+    ></app-data>
+  </div>
+</div>
