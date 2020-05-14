@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Subject, BehaviorSubject, ReplaySubject } from "rxjs";
+import { Subject, BehaviorSubject, ReplaySubject, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -44,9 +45,23 @@ export class WeatherService {
           appid: "b714ec74bbab5650795063cb0fdf5fbe",
         },
       })
-      .subscribe((res) => {
-        this.weatherChange.next(res);
-        //console.log(res);
-      });
+      .pipe(
+        catchError((err) => {
+          let errorMsg = "City not found";
+          if (err.status == "404") {
+            //alert("City not found");
+            return throwError(errorMsg);
+          }
+        })
+      )
+      .subscribe(
+        (res) => {
+          this.weatherChange.next(res);
+        },
+        (err) => {
+          console.log(err);
+          this.weatherChange.next(err);
+        }
+      );
   }
 }

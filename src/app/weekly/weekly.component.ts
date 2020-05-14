@@ -13,6 +13,7 @@ export class WeeklyComponent implements OnInit {
   forecasts: any = [];
   city: string;
   isLoading: boolean = false;
+  error: string;
   subscription: Subscription;
   constructor(private weatherService: WeatherService, private route: Router) {}
 
@@ -22,12 +23,21 @@ export class WeeklyComponent implements OnInit {
       this.weatherService.getWeekForecast();
     });
 
-    this.subscription = this.weatherService.weatherChange.subscribe((data) => {
-      console.log("in weekly data", data);
-      this.forecasts = data.list;
-      this.city = data.city ? data.city.name : null;
-      this.isLoading = false;
-    });
+    this.subscription = this.weatherService.weatherChange.subscribe(
+      (data) => {
+        console.log("in weekly data", data);
+        this.forecasts = data.list;
+        this.city = data.city ? data.city.name : null;
+        this.isLoading = false;
+        if (data == "City not found") this.error = data;
+      }
+      // (errorMsg) => {
+      //   this.isLoading = false;
+      //   console.log(errorMsg);
+      //   this.error = errorMsg;
+      //   console.log(this.error);
+      // }
+    );
   }
 
   onClick(i) {
